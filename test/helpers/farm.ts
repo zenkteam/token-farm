@@ -14,6 +14,9 @@ switch (tokenStandard) {
     case "FA2":
         farm = artifacts.require('farmFA2');
         break;
+    case "FA2Lock":
+        farm = artifacts.require('farmFA2Lock');
+        break;
 }
 
 const testHelpers = (instance, Tezos) => {

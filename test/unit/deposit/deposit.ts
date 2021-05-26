@@ -27,6 +27,10 @@ contract('%deposit', () => {
                     rewardTokenContract = await _tokenContractFA2.originate('Reward');
                     lpTokenContract = await _tokenContractFA2.originate('LP');
                     break;
+                case "FA2Lock":
+                    rewardTokenContract = await _tokenContractFA2.originate('Reward');
+                    lpTokenContract = await _tokenContractFA2.originate('LP');
+                    break;
             }
           
             farmContract = await prepareFarm([], 10, rewardTokenContract, lpTokenContract, farmContract);
@@ -40,6 +44,12 @@ contract('%deposit', () => {
                     );
                     break;
                 case "FA2":
+                    await lpTokenContract.add_operator(
+                        accounts.alice.pkh, 
+                        farmContract.instance.address
+                    );
+                    break;
+                case "FA2Lock":
                     await lpTokenContract.add_operator(
                         accounts.alice.pkh, 
                         farmContract.instance.address

@@ -2,6 +2,9 @@ type delegator = address;
 type delegatorRecord = {
     lpTokenBalance: nat,
     accumulatedRewardPerShareStart: nat,
+#if LOCK
+    lastUpdate: timestamp,
+#endif
 };
 
 type getBalanceParameter = 
