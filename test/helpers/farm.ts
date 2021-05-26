@@ -4,6 +4,7 @@ import BigNumber from "bignumber.js";
 import accounts from "../../scripts/sandbox/accounts";
 import { contractStorage, delegatorRecord } from "./types";
 import tokenStandard from "./tokenStandard";
+import flavor from "./flavor";
 
 let farm;
 
@@ -12,10 +13,14 @@ switch (tokenStandard) {
         farm = artifacts.require('farm');
         break;
     case "FA2":
-        farm = artifacts.require('farmFA2');
-        break;
-    case "FA2Lock":
-        farm = artifacts.require('farmFA2Lock');
+        switch (flavor) {
+            case "default":
+                farm = artifacts.require('farmFA2');
+                break;
+            case "lock":
+                farm = artifacts.require('farmFA2Lock');
+                break;
+        }
         break;
 }
 
