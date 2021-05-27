@@ -15,10 +15,6 @@ type farm = {
     claimedRewards: claimedRewards,
     lastBlockUpdate: nat,
     plannedRewards: plannedRewards,
-#if LOCK
-    penaltyPeriodSeconds: penaltyPeriodSeconds,
-    penaltyFeePercent: penaltyFeePercent,
-#endif
 };
 
 type addresses = {
@@ -27,7 +23,6 @@ type addresses = {
     rewardReserve: address,
     rewardTokenContract: address,
 };
-
 
 type storage = {
     addresses: addresses,

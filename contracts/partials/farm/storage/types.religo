@@ -33,14 +33,18 @@ type plannedRewards = {
     totalBlocks: nat,
 };
 
+type penalty = {
+    periodSeconds: nat,
+    feePercentage: nat,
+};
+
 type farm = {
     accumulatedRewardPerShare: nat,
     claimedRewards: claimedRewards,
     lastBlockUpdate: nat,
     plannedRewards: plannedRewards,
-#if LOCK
-    penaltyPeriodSeconds: nat,
-    penaltyFeePercent: nat,
+#if PENALTY
+    penalty: penalty,
 #endif
 };
 

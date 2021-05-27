@@ -17,3 +17,6 @@ let safeBalanceSubtraction = ((a, b): (nat, nat)): nat => {
     failForNegativeBalanceDifference(a, b);
     abs(a - b);
 };
+
+
+let subtractPercentage = ((amount, percentage): (nat, nat)): nat => amount * safeBalanceSubtraction(100, percentage) / 100; 

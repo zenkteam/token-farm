@@ -1,1 +1,0 @@
-type setPenaltyPeriodSecondsParameter = nat;

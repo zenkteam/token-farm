@@ -16,8 +16,7 @@ type entrypointReturn = (list(operation), storage);
 #include "../../partials/farm/withdraw/withdraw.religo"
 #include "../../partials/farm/updatePlan/updatePlan.religo"
 #include "../../partials/farm/setAdmin/setAdmin.religo"
-#include "../../partials/farm/setPenaltyPeriodSeconds/setPenaltyPeriodSeconds.religo"
-#include "../../partials/farm/setPenaltyFeePercent/setPenaltyFeePercent.religo"
+#include "../../partials/farm/setPenalty/setPenalty.religo"
 #include "../../partials/farm/escape/escape.religo"
 #include "../../partials/farm/withdrawProfit/withdrawProfit.religo"
 
@@ -29,9 +28,8 @@ let main = ((parameter,storage): (parameter, storage)): entrypointReturn => {
         | WithdrawProfit(parameter) => withdrawProfit(parameter, storage);
         | UpdatePlan(parameter) => updatePlan(parameter, storage);
         | SetAdmin(parameter) =>  setAdmin(parameter, storage);
-#if LOCK
-        | SetPenaltyFeePercent(parameter) =>  setPenaltyFeePercent(parameter, storage);
-        | SetPenaltyPeriodSeconds(parameter) =>  setPenaltyPeriodSeconds(parameter, storage);
+#if PENALTY
+        | SetPenalty(parameter) =>  setPenalty(parameter, storage);
 #endif
         | Escape(parameter) => escape(parameter, storage);
     };

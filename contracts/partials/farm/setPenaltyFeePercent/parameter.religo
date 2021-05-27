@@ -1,1 +1,0 @@
-type setPenaltyFeePercentParameter = nat;

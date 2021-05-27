@@ -12,10 +12,12 @@ let withdraw = ((withdrawParameter, storage): (withdrawParameter, storage)): ent
     // Allow the payoutAmount to differ from the initial withdrawParameter
     let payoutAmount = withdrawParameter;
 
-#if LOCK
-    let lockingPeriod = delegator.lastUpdate + storage.farm.penaltyPeriodSeconds;
-    if( Tezos.now > lockingPeriod ){
-        payoutAmount = withdrawParameter * safeBalanceSubtraction(100, storage.farm.penaltyFeePercent) / 100;    
+#if PENALTY
+    let lockingPeriod = delegator.lastUpdate + storage.farm.penalty.periodSeconds;
+    let penaltyDue = Tezos.now > lockingPeriod;
+    payoutAmount = switch (penaltyDue) {
+        | true => subtractPercentage(payoutAmount, storage.farm.penalty.feePercentage)
+        | false => payoutAmount
     }
 #endif
 

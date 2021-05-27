@@ -57,23 +57,13 @@ let setPlannedRewards = ((rewardPerBlock, totalBlocks, storage): (nat, nat, stor
     };
 };
 
-#if LOCK
-    let setPenaltyPeriodSeconds = ((penaltyPeriodSeconds, storage): (nat, storage)): storage => {
+#if PENALTY
+    let setPenalty = ((penalty, storage): (penalty, storage)): storage => {
         {
             ...storage,
             farm: {
                 ...storage.farm,
-                penaltyPeriodSeconds: penaltyPeriodSeconds
-            }
-        };
-    };
-
-    let setPenaltyFeePercent = ((penaltyFeePercent, storage): (nat, storage)): storage => {
-        {
-            ...storage,
-            farm: {
-                ...storage.farm,
-                penaltyFeePercent: penaltyFeePercent
+                penalty: penalty
             }
         };
     };
