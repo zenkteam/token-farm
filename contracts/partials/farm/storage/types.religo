@@ -2,6 +2,9 @@ type delegator = address;
 type delegatorRecord = {
     accumulatedRewardPerShareStart: nat,
     lpTokenBalance: nat,
+#if LOCK
+    lastUpdate: timestamp,
+#endif
 };
 
 type getBalanceParameter = 
@@ -13,6 +16,24 @@ type getBalanceParameter =
 
 type getBalanceResponse = nat;
 
+#if TOKEN_FA2
+type transferContents = 
+[@layout:comb]
+{
+    to_: address,
+    token_id: nat,
+    amount: nat
+};
+
+type transfer = 
+[@layout:comb]
+{
+    from_: address,
+    txs: list(transferContents)
+};
+
+type transferParameter = list(transfer);
+#else
 type transferParameter = 
 [@layout:comb]
 {
@@ -20,6 +41,7 @@ type transferParameter =
     [@annot:to] to_: address,
     value: nat,
 };
+#endif
 
 type updatePoolAction = Skip | UpdateBlock | UpdateRewards;
 
@@ -53,4 +75,13 @@ type addresses = {
     lpTokenContract: address,
     rewardReserve: address,
     rewardTokenContract: address,
+    rewardReserve: address,
 };
+
+#if TOKEN_FA2
+type tokenId = nat;
+type tokenIds = {
+    lp: tokenId,
+    reward: tokenId,
+};
+#endif

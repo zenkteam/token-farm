@@ -48,7 +48,10 @@ let removeDelegator = ((delegator, storage):(address, storage)): storage => {
 let updateDelegatorRecord = ((delegator, stakedBalance, storage): (address, nat, storage)): storage => {
     let delegatorRecord: delegatorRecord = {
         lpTokenBalance: stakedBalance,
-        accumulatedRewardPerShareStart: storage.farm.accumulatedRewardPerShare
+        accumulatedRewardPerShareStart: storage.farm.accumulatedRewardPerShare,
+#if LOCK
+        lastUpdate: Tezos.now
+#endif
     };
     let storage = setDelegatorRecord(delegator, delegatorRecord, storage);
     storage;
@@ -79,7 +82,10 @@ let increaseDelegatorBalance = ((delegator, value, storage): (address, nat, stor
 let initDelegatorBalance = ((delegator, value, storage): (address, nat, storage)): storage => {
     let delegatorRecord: delegatorRecord = {
         lpTokenBalance: 0n,
-        accumulatedRewardPerShareStart: 0n
+        accumulatedRewardPerShareStart: 0n,
+#if LOCK
+        lastUpdate: Tezos.now
+#endif
     };
     let stakedBalance = delegatorRecord.lpTokenBalance + value;
     updateDelegatorRecord(delegator, stakedBalance, storage);

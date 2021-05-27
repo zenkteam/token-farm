@@ -28,6 +28,9 @@ let withdraw = ((withdrawParameter, storage): (withdrawParameter, storage)): ent
         Tezos.self_address, // from
         delegator, // to 
         payoutAmount, // value
+#if TOKEN_FA2
+        storage.tokenIds.lp, // tokenId
+#endif
         storage.addresses.lpTokenContract
     );
    
