@@ -38,6 +38,10 @@ type farm = {
     claimedRewards: claimedRewards,
     lastBlockUpdate: nat,
     plannedRewards: plannedRewards,
+#if LOCK
+    penaltyPeriodSeconds: nat,
+    penaltyFeePercent: nat,
+#endif
 };
 
 type addresses = {
