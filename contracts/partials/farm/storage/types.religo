@@ -2,7 +2,7 @@ type delegator = address;
 type delegatorRecord = {
     accumulatedRewardPerShareStart: nat,
     lpTokenBalance: nat,
-#if LOCK
+#if PENALTY
     lastUpdate: timestamp,
 #endif
 };
@@ -75,7 +75,6 @@ type addresses = {
     lpTokenContract: address,
     rewardReserve: address,
     rewardTokenContract: address,
-    rewardReserve: address,
 };
 
 #if TOKEN_FA2

@@ -49,7 +49,7 @@ let updateDelegatorRecord = ((delegator, stakedBalance, storage): (address, nat,
     let delegatorRecord: delegatorRecord = {
         lpTokenBalance: stakedBalance,
         accumulatedRewardPerShareStart: storage.farm.accumulatedRewardPerShare,
-#if LOCK
+#if PENALTY
         lastUpdate: Tezos.now
 #endif
     };
@@ -83,7 +83,7 @@ let initDelegatorBalance = ((delegator, value, storage): (address, nat, storage)
     let delegatorRecord: delegatorRecord = {
         lpTokenBalance: 0n,
         accumulatedRewardPerShareStart: 0n,
-#if LOCK
+#if PENALTY
         lastUpdate: Tezos.now
 #endif
     };

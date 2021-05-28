@@ -95,6 +95,16 @@ const testHelpers = (instance, Tezos) => {
         getAdmin: async function(): Promise<string> {
             return (await this.getStorage()).addresses.admin;
         },
+#if PENALTY
+        setPenalty: async function(penalty) {
+            const operation = await this.instance.methods.setPenalty(penalty).send();
+            await operation.confirmation(1);
+            return operation
+        },
+        getPenalty: async function(): Promise<string> {
+            return (await this.getStorage()).farm.penalty;
+        },
+#endif
         escape: async function() {
             const operation = await this.instance.methods.escape(UnitValue).send();
             await operation.confirmation(1);

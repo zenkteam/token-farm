@@ -5,7 +5,6 @@ type storage = {
     delegators: big_map(delegator, delegatorRecord),
     farm: farm,
     farmLpTokenBalance: nat,
-    addresses: addresses,
 #if TOKEN_FA2
     tokenIds: tokenIds,
 #endif
