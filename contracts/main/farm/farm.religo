@@ -16,7 +16,9 @@ type entrypointReturn = (list(operation), storage);
 #include "../../partials/farm/withdraw/withdraw.religo"
 #include "../../partials/farm/updatePlan/updatePlan.religo"
 #include "../../partials/farm/setAdmin/setAdmin.religo"
+#if PENALTY
 #include "../../partials/farm/setPenalty/setPenalty.religo"
+#endif
 #include "../../partials/farm/escape/escape.religo"
 #include "../../partials/farm/withdrawProfit/withdrawProfit.religo"
 

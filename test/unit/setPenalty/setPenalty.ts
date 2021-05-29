@@ -14,8 +14,8 @@ import _initialStorage from '../../../migrations/initialStorage/farm';
 contract('%claim', () => {
     let farmContract;
     let penalty = {
-        feePercentage: 5n,
-        periodSeconds: 86400n,
+        feePercentage: 5,
+        periodSeconds: 86400,
     }
     
     describe('one delegator staking', () => {
