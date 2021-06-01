@@ -10,15 +10,22 @@ let farm;
 
 switch (tokenStandard) {
     case "FA12":
-        farm = artifacts.require('farm');
+        switch (flavor) {
+            case "default":
+                farm = artifacts.require('farm');
+                break;
+            // case "penalty":
+            //     farm = artifacts.require('farmFA12Penalty');
+            //     break;
+        }
         break;
     case "FA2":
         switch (flavor) {
             case "default":
                 farm = artifacts.require('farmFA2');
                 break;
-            case "lock":
-                farm = artifacts.require('farmFA2Lock');
+            case "penalty":
+                farm = artifacts.require('farmFA2Penalty');
                 break;
         }
         break;
@@ -95,16 +102,14 @@ const testHelpers = (instance, Tezos) => {
         getAdmin: async function(): Promise<string> {
             return (await this.getStorage()).addresses.admin;
         },
-#if PENALTY
         setPenalty: async function(penalty) {
-            const operation = await this.instance.methods.setPenalty(penalty).send();
+            const operation = await this.instance.methods.setPenalty(penalty.feePercentage, penalty.periodSeconds).send();
             await operation.confirmation(1);
             return operation
         },
         getPenalty: async function(): Promise<string> {
             return (await this.getStorage()).farm.penalty;
         },
-#endif
         escape: async function() {
             const operation = await this.instance.methods.escape(UnitValue).send();
             await operation.confirmation(1);

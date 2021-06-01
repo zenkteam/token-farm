@@ -23,15 +23,18 @@ initialStorage.base = () => ({
             rewardPerBlock: new BigNumber(0),
             totalBlocks: new BigNumber(0),
         },
-#if PENALTY
-        penalty: {
-            feePercentage: 5n,
-            periodSeconds: 86400n, // 24h
-        },
-#endif
     },
     farmLpTokenBalance: new BigNumber(0),
 });
+
+initialStorage.baseWithPenalty = () => {
+    let storage = initialStorage.base();
+    storage.farm.penalty = {
+        feePercentage: 5,
+        periodSeconds: 86400, // 24h
+    };
+    return storage
+};
 
 initialStorage.withLpTokenContract = (tokenContractAddress) => {
     let storage = initialStorage.base();
@@ -54,9 +57,12 @@ initialStorage.production = (lpTokenContractAddress, rewardTokenContractAddress,
     return storage
 }
 
-#if PENALTY
 initialStorage.productionWithPenalty = (lpTokenContractAddress, rewardTokenContractAddress, rewardPerBlock, totalBlocks, penalty, lastUpdate) => {
     let storage = initialStorage.withLpAndRewardContract(lpTokenContractAddress, rewardTokenContractAddress);
+    storage.farm.penalty = {
+        feePercentage: 5,
+        periodSeconds: 86400, // 24h
+    };
     storage.farm.plannedRewards.rewardPerBlock = new BigNumber(rewardPerBlock);
     storage.farm.plannedRewards.totalBlocks = new BigNumber(totalBlocks);
     storage.farm.penalty = penalty;
@@ -68,7 +74,6 @@ initialStorage.productionWithPenalty = (lpTokenContractAddress, rewardTokenContr
 
     return storage
 }
-#endif
 
 initialStorage.test = {};
 
