@@ -1,3 +1,4 @@
+#if PENALTY
 let setPenaltyProperty = ((penalty, storage): (penalty, storage)): storage => {
     {
         ...storage,
@@ -7,3 +8,4 @@ let setPenaltyProperty = ((penalty, storage): (penalty, storage)): storage => {
         }
     };
 };
+#endif

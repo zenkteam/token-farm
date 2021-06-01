@@ -56,7 +56,7 @@ type plannedRewards = {
 };
 
 type penalty = {
-    periodSeconds: nat,
+    periodSeconds: int,
     feePercentage: nat,
 };
 

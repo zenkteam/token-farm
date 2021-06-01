@@ -14,5 +14,7 @@ type parameter =
     | WithdrawProfit(withdrawProfitParameter)
     | UpdatePlan(updatePlanParameter)
     | SetAdmin(setAdminParameter)
-    | SetProperty(setPropertyParameter)
+#if PENALTY
+    | SetPenalty(setPenaltyParameter)
+#endif
     | Escape(escapeParameter);

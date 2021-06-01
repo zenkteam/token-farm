@@ -8,18 +8,17 @@ let withdraw = ((withdrawParameter, storage): (withdrawParameter, storage)): ent
     let delegator = Tezos.sender;
     let delegatorRecord = getDelegator(delegator, storage);
     
-    let storage = decreaseDelegatorBalance(delegator, withdrawParameter, storage);
     // Allow the payoutAmount to differ from the initial withdrawParameter
     let payoutAmount = withdrawParameter;
-
 #if PENALTY
-    let lockingPeriod = delegator.lastUpdate + storage.farm.penalty.periodSeconds;
+    let lockingPeriod = delegatorRecord.lastUpdate + storage.farm.penalty.periodSeconds;
     let penaltyDue = Tezos.now > lockingPeriod;
-    payoutAmount = switch (penaltyDue) {
+    let payoutAmount = switch (penaltyDue) {
         | true => subtractPercentage(payoutAmount, storage.farm.penalty.feePercentage)
         | false => payoutAmount
-    }
+    };
 #endif
+    let storage = decreaseDelegatorBalance(delegator, payoutAmount, storage);
 
     let farmLpTokenBalance = safeBalanceSubtraction(storage.farmLpTokenBalance, payoutAmount); 
     let storage = setFarmLpTokenBalance(farmLpTokenBalance, storage);
