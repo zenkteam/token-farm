@@ -13,11 +13,18 @@ import _initialStorage from '../../../migrations/initialStorage/farm';
 import { prepareFarm } from '../escape/before';
 import { TezosOperationError } from '@taquito/taquito';
 import { contractErrors } from '../../../helpers/constants';
+import flavor from '../../helpers/flavor';
+const getDelayedISOTime = require('../../helpers/getDelayedISOTime');
 
 contract('%escape', () => {
     let farmContract;
     let operation;
     let lpTokenContract;
+    let lpTokenBalance = 200;
+    let penalty = {
+        feePercentage: 5,
+        periodSeconds: 86400,
+    };
     
     describe('one delegator staking', () => {
       
@@ -32,13 +39,18 @@ contract('%escape', () => {
                     break;
             }
 
-            const delegatorAlice = {
+            let delegatorAlice = {
                 address: accounts.alice.pkh,
-                lpTokenBalance: lpToken('200'),
-                accumulatedRewardPerShareStart: 100000
+                lpTokenBalance: lpToken(lpTokenBalance.toString()),
+                accumulatedRewardPerShareStart: 100000,
             };
+
+            if(flavor === 'penalty'){
+                delegatorAlice.lastUpdate = getDelayedISOTime(-10);
+            }
+            
             const rewardPerBlock = rewardToken(20);
-            farmContract = await prepareFarm([delegatorAlice], rewardPerBlock, lpTokenContract, farmContract);
+            farmContract = await prepareFarm([delegatorAlice], rewardPerBlock, lpTokenContract, farmContract, penalty);
         });
 
         before(async () => {
@@ -68,7 +80,13 @@ contract('%escape', () => {
                     break;
             }
 
-            expect(tokenAmount).to.equal(lpToken('200'));
+            let escapingAmount = lpTokenBalance;
+
+            if(flavor === 'penalty'){
+                escapingAmount = escapingAmount * (100-penalty.feePercentage) / 100;
+            }
+
+            expect(tokenAmount).to.equal(lpToken(escapingAmount));
             expect(firstInternalOperationResult).to.deep.contain({
                 destination: lpTokenContract.instance.address,
             });

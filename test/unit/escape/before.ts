@@ -6,7 +6,7 @@ import _initialStorage from "../../../migrations/initialStorage/farm";
 import tokenStandard from '../../helpers/tokenStandard';
 import { tokenId } from "../../helpers/tokenFA2";
 
-export async function prepareFarm(delegators, rewardPerBlock, lpTokenContract, farmContract){
+export async function prepareFarm(delegators, rewardPerBlock, lpTokenContract, farmContract, penalty){
     
     const initialStorage =  _initialStorage.test.deposit(
         accounts.alice.pkh,
@@ -21,6 +21,10 @@ export async function prepareFarm(delegators, rewardPerBlock, lpTokenContract, f
             lp: tokenId,
             reward: tokenId
         };
+    }
+
+    if (penalty) {
+        initialStorage.penalty = penalty;
     }
 
     farmContract = await _farmContract.originate(initialStorage);
