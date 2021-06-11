@@ -19,12 +19,10 @@ export interface contractStorage {
             unpaid: BigNumber,
             paid: BigNumber
         },
-#if PENALTY
         penalty: {
-            feePercentage: nat,
-            periodSeconds: nat,
+            feePercentage: BigNumber,
+            periodSeconds: BigNumber
         },
-#endif
     },
     delegators: MichelsonMap<address, delegatorRecord>,
     farmLpTokenBalance: BigNumber,

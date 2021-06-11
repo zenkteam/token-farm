@@ -15,9 +15,9 @@ contract('farm contract', () => {
     let expectedRewards;
     const balance: any = {};
     const penalty: any = {
-        feePercentage: 5n,
-        periodSeconds: 84600n
-    };;
+        feePercentage: 5,
+        periodSeconds: 84600
+    };
 
     beforeEach(async () => {
 
@@ -26,7 +26,7 @@ contract('farm contract', () => {
         rewardPerBlock = rewardToken('10');
         const totalBlocks = 100000;
         const totalRewards = (new BigNumber(rewardPerBlock)).multipliedBy(totalBlocks);
-        const penalty = 
+        const penalty = 5;
         const lastUpdate = getDelayedISOTime(-10);
 
         const initialStorage = _initialStorageFarm.productionWithPenalty(
@@ -36,6 +36,7 @@ contract('farm contract', () => {
             totalBlocks,
             penalty,
             lastUpdate,
+            accounts.alice.pk,
         );
 
         farmContract = await _farmContract.originate(initialStorage);

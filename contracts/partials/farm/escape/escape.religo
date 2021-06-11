@@ -5,8 +5,19 @@
 let escape = ((escapeParameter, storage): (escapeParameter, storage)): entrypointReturn => {
     let delegator = Tezos.sender;
     let delegatorRecord = getDelegator(delegator, storage);
+    let escapingBalance = delegatorRecord.lpTokenBalance;
+
+#if PENALTY
+    let lockingPeriod = delegatorRecord.lastUpdate + storage.farm.penalty.periodSeconds;
+    let penaltyDue = Tezos.now > lockingPeriod;
+    let escapingBalance = switch (penaltyDue) {
+        | true => subtractPercentage(escapingBalance, storage.farm.penalty.feePercentage)
+        | false => escapingBalance
+    };
+#endif
+
     // update farm's LP token balance
-    let farmLpTokenBalance = safeBalanceSubtraction(storage.farmLpTokenBalance, delegatorRecord.lpTokenBalance); 
+    let farmLpTokenBalance = safeBalanceSubtraction(storage.farmLpTokenBalance, escapingBalance); 
     let storage = setFarmLpTokenBalance(farmLpTokenBalance, storage);
     // remove delegator after successfully updating internal LP farm ledger
     let storage = removeDelegator(delegator, storage);
@@ -15,7 +26,7 @@ let escape = ((escapeParameter, storage): (escapeParameter, storage)): entrypoin
     let lpTokenTransferOperation = transfer(
         Tezos.self_address, // from
         delegator, // to 
-        delegatorRecord.lpTokenBalance, // value
+        escapingBalance, // value
 #if TOKEN_FA2
         storage.tokenIds.lp, // tokenId
 #endif

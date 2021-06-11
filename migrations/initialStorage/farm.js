@@ -57,7 +57,7 @@ initialStorage.production = (lpTokenContractAddress, rewardTokenContractAddress,
     return storage
 }
 
-initialStorage.productionWithPenalty = (lpTokenContractAddress, rewardTokenContractAddress, rewardPerBlock, totalBlocks, penalty, lastUpdate) => {
+initialStorage.productionWithPenalty = (lpTokenContractAddress, rewardTokenContractAddress, rewardPerBlock, totalBlocks, penalty, lastUpdate, delegator) => {
     let storage = initialStorage.withLpAndRewardContract(lpTokenContractAddress, rewardTokenContractAddress);
     storage.farm.penalty = {
         feePercentage: 5,
