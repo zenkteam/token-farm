@@ -24,7 +24,7 @@ export async function prepareFarm(delegators, rewardPerBlock, lpTokenContract, f
     }
 
     if (penalty) {
-        initialStorage.penalty = penalty;
+        initialStorage.farm.penalty = penalty
     }
 
     farmContract = await _farmContract.originate(initialStorage);

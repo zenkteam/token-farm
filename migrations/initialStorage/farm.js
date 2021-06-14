@@ -59,10 +59,7 @@ initialStorage.production = (lpTokenContractAddress, rewardTokenContractAddress,
 
 initialStorage.productionWithPenalty = (lpTokenContractAddress, rewardTokenContractAddress, rewardPerBlock, totalBlocks, penalty, lastUpdate, delegator) => {
     let storage = initialStorage.withLpAndRewardContract(lpTokenContractAddress, rewardTokenContractAddress);
-    storage.farm.penalty = {
-        feePercentage: 5,
-        periodSeconds: 86400, // 24h
-    };
+
     storage.farm.plannedRewards.rewardPerBlock = new BigNumber(rewardPerBlock);
     storage.farm.plannedRewards.totalBlocks = new BigNumber(totalBlocks);
     storage.farm.penalty = penalty;

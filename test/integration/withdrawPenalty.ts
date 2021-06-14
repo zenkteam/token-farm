@@ -36,7 +36,7 @@ contract('farm contract', () => {
             totalBlocks,
             penalty,
             lastUpdate,
-            accounts.alice.pk,
+            accounts.alice.pkh,
         );
 
         farmContract = await _farmContract.originate(initialStorage);

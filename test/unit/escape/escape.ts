@@ -14,7 +14,7 @@ import { prepareFarm } from '../escape/before';
 import { TezosOperationError } from '@taquito/taquito';
 import { contractErrors } from '../../../helpers/constants';
 import flavor from '../../helpers/flavor';
-const getDelayedISOTime = require('../../helpers/getDelayedISOTime');
+import getDelayedISOTime from '../../../helpers/getDelayedISOTime';
 
 contract('%escape', () => {
     let farmContract;
@@ -29,7 +29,7 @@ contract('%escape', () => {
     describe('one delegator staking', () => {
       
         before(async () => {
-            
+
             switch (tokenStandard) {
                 case "FA12":
                     lpTokenContract = await _tokenContractFA12.originate('LP');
@@ -43,12 +43,9 @@ contract('%escape', () => {
                 address: accounts.alice.pkh,
                 lpTokenBalance: lpToken(lpTokenBalance.toString()),
                 accumulatedRewardPerShareStart: 100000,
+                ...(flavor === 'penalty' && {lastUpdate: getDelayedISOTime(-10)})
             };
 
-            if(flavor === 'penalty'){
-                delegatorAlice.lastUpdate = getDelayedISOTime(-10);
-            }
-            
             const rewardPerBlock = rewardToken(20);
             farmContract = await prepareFarm([delegatorAlice], rewardPerBlock, lpTokenContract, farmContract, penalty);
         });
