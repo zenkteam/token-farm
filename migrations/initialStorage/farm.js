@@ -111,7 +111,7 @@ initialStorage.test.deposit = (rewardTokenContract, lpTokenContract, delegators,
         storage.farmLpTokenBalance = storage.farmLpTokenBalance.plus(new BigNumber(delegator.lpTokenBalance))
     });
     storage.farm.lastBlockUpdate = new BigNumber(blockLevel);
-    
+
     return storage;
 };
 

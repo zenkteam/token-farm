@@ -10,15 +10,22 @@ import tokenStandard from '../../helpers/tokenStandard';
 import _taquito from '../../helpers/taquito';
 import _farmContract from '../../helpers/farm';
 import _initialStorage from '../../../migrations/initialStorage/farm';
-import { prepareFarm } from '../escape/before';
+import { prepareFarm } from './before';
 import { TezosOperationError } from '@taquito/taquito';
 import { contractErrors } from '../../../helpers/constants';
+import flavor from '../../helpers/flavor';
+import getDelayedISOTime from '../../../helpers/getDelayedISOTime';
+import BigNumber from 'bignumber.js';
 
 contract('%escape', () => {
     let farmContract;
     let operation;
     let lpTokenContract;
     let lpTokenBalance = 200;
+    let penalty = {
+        feePercentage: new BigNumber(5),
+        periodSeconds: new BigNumber(86400),
+    };
     
     describe('one delegator staking', () => {
       
@@ -35,12 +42,13 @@ contract('%escape', () => {
 
             let delegatorAlice = {
                 address: accounts.alice.pkh,
-                lpTokenBalance: lpToken(lpTokenBalance),
-                accumulatedRewardPerShareStart: 100000
+                lpTokenBalance: lpToken(lpTokenBalance.toString()),
+                accumulatedRewardPerShareStart: 100000,
+                lastUpdate: getDelayedISOTime(-10),
             };
 
             const rewardPerBlock = rewardToken(20);
-            farmContract = await prepareFarm([delegatorAlice], rewardPerBlock, lpTokenContract, farmContract);
+            farmContract = await prepareFarm([delegatorAlice], rewardPerBlock, lpTokenContract, farmContract, penalty);
         });
 
         before(async () => {
@@ -70,7 +78,13 @@ contract('%escape', () => {
                     break;
             }
 
-            expect(tokenAmount).to.equal(lpToken(lpTokenBalance));
+            let escapingAmount = lpTokenBalance;
+
+            if(flavor === 'penalty'){
+                escapingAmount = escapingAmount * (100-penalty.feePercentage.toNumber()) / 100;
+            }
+
+            expect(tokenAmount).to.equal(lpToken(escapingAmount));
             expect(firstInternalOperationResult).to.deep.contain({
                 destination: lpTokenContract.instance.address,
             });
