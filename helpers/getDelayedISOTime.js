@@ -5,5 +5,5 @@ module.exports = (minutes) => {
     const timeWithDelay = new Date(unixEpoch);
     // Remove milliseconds for Tezos protocol
     timeWithDelay.setMilliseconds(000);
-    return timeWithDelay.toISOString()
+    return timeWithDelay.toISOString();
 };
