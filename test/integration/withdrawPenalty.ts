@@ -5,7 +5,7 @@ import _taquito from '../helpers/taquito';
 import accounts from '../../scripts/sandbox/accounts';
 import BigNumber from 'bignumber.js';
 import { expect } from 'chai';
-const getDelayedISOTime = require('../../helpers/getDelayedISOTime');
+import getDelayedISOTime from '../../helpers/getDelayedISOTime';
 
 contract('farm contract', () => {
     let farmContract;

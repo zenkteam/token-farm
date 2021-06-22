@@ -5,10 +5,11 @@ import _farmContract from '../../helpers/farm';
 import _initialStorage from "../../../migrations/initialStorage/farm";
 import tokenStandard from '../../helpers/tokenStandard';
 import { tokenId } from "../../helpers/tokenFA2";
+import { MichelsonMap } from "@taquito/taquito";
 
 export async function prepareFarm(delegators, rewardPerBlock, lpTokenContract, farmContract, penalty){
     
-    const initialStorage =  _initialStorage.test.deposit(
+    const initialStorage =  _initialStorage.test.depositWithPenalty(
         accounts.alice.pkh,
         lpTokenContract.instance.address,
         delegators,

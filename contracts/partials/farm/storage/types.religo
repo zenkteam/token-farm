@@ -75,6 +75,9 @@ type addresses = {
     lpTokenContract: address,
     rewardReserve: address,
     rewardTokenContract: address,
+#if PENALTY
+    penaltyPayoutAddress: address,
+#endif
 };
 
 #if TOKEN_FA2

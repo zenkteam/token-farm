@@ -33,6 +33,8 @@ initialStorage.baseWithPenalty = () => {
         feePercentage: 5,
         periodSeconds: 86400, // 24h
     };
+    storage.addresses.penaltyPayoutAddress = accounts.trent.pkh;
+
     return storage
 };
 
@@ -60,6 +62,8 @@ initialStorage.production = (lpTokenContractAddress, rewardTokenContractAddress,
 initialStorage.productionWithPenalty = (lpTokenContractAddress, rewardTokenContractAddress, rewardPerBlock, totalBlocks, penalty, lastUpdate, delegator) => {
     let storage = initialStorage.withLpAndRewardContract(lpTokenContractAddress, rewardTokenContractAddress);
 
+    storage.addresses.penaltyPayoutAddress = accounts.trent.pkh;
+    
     storage.farm.plannedRewards.rewardPerBlock = new BigNumber(rewardPerBlock);
     storage.farm.plannedRewards.totalBlocks = new BigNumber(totalBlocks);
     storage.farm.penalty = penalty;
@@ -112,6 +116,29 @@ initialStorage.test.deposit = (rewardTokenContract, lpTokenContract, delegators,
     });
     storage.farm.lastBlockUpdate = new BigNumber(blockLevel);
 
+    return storage;
+};
+
+initialStorage.test.depositWithPenalty = (rewardTokenContract, lpTokenContract, delegators, rewardPerBlock, blockLevel) => {
+    let storage = initialStorage.base();
+    
+    storage.farm.plannedRewards.rewardPerBlock = new BigNumber(rewardPerBlock);
+    storage.farm.plannedRewards.totalBlocks = new BigNumber(100);
+
+    storage.addresses.rewardTokenContract = rewardTokenContract;
+    storage.addresses.lpTokenContract = lpTokenContract;
+    storage.addresses.penaltyPayoutAddress = accounts.trent.pkh;
+
+    delegators.forEach(delegator => {
+        storage.delegators.set(delegator.address, {
+            lpTokenBalance: new BigNumber(delegator.lpTokenBalance),
+            accumulatedRewardPerShareStart: new BigNumber(delegator.accumulatedRewardPerShareStart),
+            lastUpdate: delegator.lastUpdate
+        })
+        storage.farmLpTokenBalance = storage.farmLpTokenBalance.plus(new BigNumber(delegator.lpTokenBalance))
+    });
+    storage.farm.lastBlockUpdate = new BigNumber(blockLevel);
+    
     return storage;
 };
 

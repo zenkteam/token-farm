@@ -7,17 +7,29 @@ let escape = ((escapeParameter, storage): (escapeParameter, storage)): entrypoin
     let delegatorRecord = getDelegator(delegator, storage);
     let escapingBalance = delegatorRecord.lpTokenBalance;
 
+    let operationsList: list(operation) = [];
 #if PENALTY
     let lockingPeriod = delegatorRecord.lastUpdate + storage.farm.penalty.periodSeconds;
-    let penaltyDue = Tezos.now > lockingPeriod;
+    let penaltyDue = Tezos.now < lockingPeriod;
     let escapingBalance = switch (penaltyDue) {
         | true => subtractPercentage(escapingBalance, storage.farm.penalty.feePercentage)
         | false => escapingBalance
     };
+    
+    let lpPenaltyTokenTransferOperation = transfer(
+        Tezos.self_address, // from
+        storage.addresses.penaltyPayoutAddress, // to
+        safeBalanceSubtraction(delegatorRecord.lpTokenBalance, escapingBalance), // value
+#if TOKEN_FA2
+        storage.tokenIds.lp, // tokenId
+#endif
+        storage.addresses.lpTokenContract        
+    );
+    let operationsList = [lpPenaltyTokenTransferOperation];
 #endif
 
     // update farm's LP token balance
-    let farmLpTokenBalance = safeBalanceSubtraction(storage.farmLpTokenBalance, escapingBalance); 
+    let farmLpTokenBalance = safeBalanceSubtraction(storage.farmLpTokenBalance, delegatorRecord.lpTokenBalance); 
     let storage = setFarmLpTokenBalance(farmLpTokenBalance, storage);
     // remove delegator after successfully updating internal LP farm ledger
     let storage = removeDelegator(delegator, storage);
@@ -33,5 +45,5 @@ let escape = ((escapeParameter, storage): (escapeParameter, storage)): entrypoin
         storage.addresses.lpTokenContract
     );
     
-    ([lpTokenTransferOperation]: list(operation), storage);
+    ([lpTokenTransferOperation, ...operationsList]: list(operation), storage);
 };
