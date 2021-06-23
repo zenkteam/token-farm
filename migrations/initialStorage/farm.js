@@ -59,7 +59,7 @@ initialStorage.production = (lpTokenContractAddress, rewardTokenContractAddress,
     return storage
 }
 
-initialStorage.productionWithPenalty = (lpTokenContractAddress, rewardTokenContractAddress, rewardPerBlock, totalBlocks, penalty, lastUpdate, delegator) => {
+initialStorage.productionWithPenalty = (lpTokenContractAddress, rewardTokenContractAddress, rewardPerBlock, totalBlocks, penalty, delegators) => {
     let storage = initialStorage.withLpAndRewardContract(lpTokenContractAddress, rewardTokenContractAddress);
 
     storage.addresses.penaltyPayoutAddress = accounts.trent.pkh;
@@ -67,11 +67,14 @@ initialStorage.productionWithPenalty = (lpTokenContractAddress, rewardTokenContr
     storage.farm.plannedRewards.rewardPerBlock = new BigNumber(rewardPerBlock);
     storage.farm.plannedRewards.totalBlocks = new BigNumber(totalBlocks);
     storage.farm.penalty = penalty;
-    storage.delegators.set(delegator.address, {
-        lpTokenBalance: new BigNumber(delegator.lpTokenBalance),
-        accumulatedRewardPerShareStart: new BigNumber(delegator.accumulatedRewardPerShareStart),
-        lastUpdate: lastUpdate 
-    })
+    delegators.forEach(delegator => {
+        storage.delegators.set(delegator.address, {
+            lpTokenBalance: new BigNumber(delegator.lpTokenBalance),
+            accumulatedRewardPerShareStart: new BigNumber(delegator.accumulatedRewardPerShareStart),
+            lastUpdate: delegator.lastUpdate
+        })
+        storage.farmLpTokenBalance = storage.farmLpTokenBalance.plus(new BigNumber(delegator.lpTokenBalance))
+    });
 
     return storage
 }

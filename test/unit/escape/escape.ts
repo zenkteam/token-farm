@@ -13,6 +13,7 @@ import _initialStorage from '../../../migrations/initialStorage/farm';
 import { prepareFarm } from '../escape/before';
 import { TezosOperationError } from '@taquito/taquito';
 import { contractErrors } from '../../../helpers/constants';
+import flavor from '../../helpers/flavor';
 
 contract('%escape', () => {
     let farmContract;
@@ -20,7 +21,8 @@ contract('%escape', () => {
     let lpTokenContract;
     let lpTokenBalance = 200;
     
-    describe('one delegator staking', () => {
+    // disable test for "--flavor penalty" flag
+    (flavor !== 'penalty'  ? describe : describe.skip)('one delegator staking', () => {
       
         before(async () => {
 

@@ -17,7 +17,7 @@ import flavor from '../../helpers/flavor';
 import getDelayedISOTime from '../../../helpers/getDelayedISOTime';
 import BigNumber from 'bignumber.js';
 
-contract('%escape', () => {
+contract('%escape with penalty flavor', () => {
     let farmContract;
     let operation;
     let lpTokenContract;
@@ -27,7 +27,7 @@ contract('%escape', () => {
         periodSeconds: new BigNumber(86400),
     };
     
-    describe('one delegator staking', () => {
+    (flavor === 'penalty'  ? describe : describe.skip)('one delegator staking', () => {
       
         before(async () => {
 
