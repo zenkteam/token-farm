@@ -14,11 +14,6 @@ module.exports = {
         sk: "edsk3QoqBuvdamxouPhin7swCvkQNgq4jP5KZPbwWNnwdZpSpJiEbq",
         pk: "edpkvGfYw3LyB1UcCahKQk4rF2tvbMUk8GFiTuMjL75uGXrpvKXhjn"
     },
-    // alice: {
-    //     pkh: "tz1ZJvSuh2GeuYBfRtKHJdiXJ46U4t7v65ED",
-    //     sk: "edskS1xuyC7ufLVBFbuWNFZR1HfhReZciatVJbhK2NXvebcW9p7MzNhyQVeo4Q9Cw4BBdubVkYjYnsv5zvT684GH7KtRybDjt5",
-    //     //pk:"edpkurPsQ8eUApnLUJ9ZPDvu98E8VNj4KtJa1aZr16Cr5ow5VHKnz4"
-    // },
     // baker
     bob: {
         pkh: "tz1aSkwEot3L2kmUvcoxzjMomb9mvBNuzFK6",
