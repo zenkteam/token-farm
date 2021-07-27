@@ -31,9 +31,9 @@ let withdraw = ((withdrawParameter, storage): (withdrawParameter, storage)): ent
     );
     let operationsList = [lpPenaltyTokenTransferOperation, ...operationsList];
 #endif
-    let storage = decreaseDelegatorBalance(delegator, lpPayoutAmount, storage);
+    let storage = decreaseDelegatorBalance(delegator, withdrawParameter, storage);
 
-    let farmLpTokenBalance = safeBalanceSubtraction(storage.farmLpTokenBalance, lpPayoutAmount); 
+    let farmLpTokenBalance = safeBalanceSubtraction(storage.farmLpTokenBalance, withdrawParameter); 
     let storage = setFarmLpTokenBalance(farmLpTokenBalance, storage);
 
     let lpTokenTransferOperation = transfer(
