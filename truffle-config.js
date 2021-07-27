@@ -23,5 +23,11 @@ module.exports = {
       secretKey: alice.sk,
       type: "tezos"
     },
+    florencenet: {
+        host: "https://rpc.florence.tzstats.com/",
+        network_id: "*",
+        secretKey: alice.sk,
+        type: "tezos"
+    }
   }
 };
