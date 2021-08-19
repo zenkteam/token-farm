@@ -20,6 +20,18 @@ yarn run sandbox:start
 yarn run test
 ```
 
+
+# Deployment and Contract Interaction
+
+To deploy the contract first copy `.env.sample` to `.env` and define the settings for the environment you want to deploy to.
+
+Then you can call `ts-node ./scripts/deployment.ts` to deploy the contract. If the rewards are payed from the admins wallet, the delegation of those rewards is also activated.
+
+If not you need to set the `DELEGATE_*` variables in the `.env` file and run `ts-node ./scripts/delegate.ts` to allow access to the funds.
+
+Use `ts-node ./scripts/update.ts` to update the plan/penalty/... of the contract (defined in the code).
+
+
 # Documentation
 
 Check out the [wiki](https://github.com/stove-labs/token-farm/wiki/Contract-Architecture) page for more information on the [algorithm](https://github.com/stove-labs/token-farm/wiki/Algorithm), [contract architecture](https://github.com/stove-labs/token-farm/wiki/Contract-Architecture), [entrypoints](https://github.com/stove-labs/token-farm/wiki/Entrypoints) and [storage](https://github.com/stove-labs/token-farm/wiki/Storage).
