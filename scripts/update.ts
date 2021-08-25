@@ -12,6 +12,8 @@ const Tezos = new TezosToolkit(process.env.DEPLOY_RPC);
   const farmContract = await Tezos.wallet.at(process.env.UPDATE_FARM_CONTRACT);
 
   const updatePromise = farmContract.methods.updatePlan(5, 200);
+  // or
+  // const updatePromise = farmContract.methods.setPenalty(5, 300);
 
   const tx = await updatePromise.send()
   const result = await tx.confirmation(1)

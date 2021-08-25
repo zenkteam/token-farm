@@ -45,12 +45,12 @@ let removeDelegator = ((delegator, storage):(address, storage)): storage => {
     };
 };
 
-let updateDelegatorRecord = ((delegator, stakedBalance, storage): (address, nat, storage)): storage => {
+let updateDelegatorRecord = ((delegator, stakedBalance, newLastUpdate, storage): (address, nat, timestamp, storage)): storage => {
     let delegatorRecord: delegatorRecord = {
         lpTokenBalance: stakedBalance,
         accumulatedRewardPerShareStart: storage.farm.accumulatedRewardPerShare,
 #if PENALTY
-        lastUpdate: Tezos.now
+        lastUpdate: newLastUpdate
 #endif
     };
     let storage = setDelegatorRecord(delegator, delegatorRecord, storage);
@@ -59,9 +59,15 @@ let updateDelegatorRecord = ((delegator, stakedBalance, storage): (address, nat,
 
 let updateRewardDebt = ((delegator, storage): (address, storage)): storage => {
     let delegatorRecord = getDelegator(delegator, storage);
+#if PENALTY
+    let newLastUpdate = delegatorRecord.lastUpdate;
+#else
+    let newLastUpdate = Tezos.now;
+#endif    
     let storage = updateDelegatorRecord(
         delegator, 
         delegatorRecord.lpTokenBalance, 
+        newLastUpdate,
         storage
     );
     storage;
@@ -70,23 +76,20 @@ let updateRewardDebt = ((delegator, storage): (address, storage)): storage => {
 let decreaseDelegatorBalance = ((delegator, value, storage): (address, nat, storage)): storage => {
     let delegatorRecord = getDelegator(delegator, storage);
     let stakedBalance = safeBalanceSubtraction(delegatorRecord.lpTokenBalance, value);
-    updateDelegatorRecord(delegator, stakedBalance, storage);
+#if PENALTY
+    let newLastUpdate = delegatorRecord.lastUpdate;
+#else
+    let newLastUpdate = Tezos.now;
+#endif
+    updateDelegatorRecord(delegator, stakedBalance, newLastUpdate, storage);
 };
 
 let increaseDelegatorBalance = ((delegator, value, storage): (address, nat, storage)): storage => {
     let delegatorRecord = getDelegator(delegator, storage);
     let stakedBalance = delegatorRecord.lpTokenBalance + value;
-    updateDelegatorRecord(delegator, stakedBalance, storage);
+    updateDelegatorRecord(delegator, stakedBalance, Tezos.now, storage);
 };
 
 let initDelegatorBalance = ((delegator, value, storage): (address, nat, storage)): storage => {
-    let delegatorRecord: delegatorRecord = {
-        lpTokenBalance: 0n,
-        accumulatedRewardPerShareStart: 0n,
-#if PENALTY
-        lastUpdate: Tezos.now
-#endif
-    };
-    let stakedBalance = delegatorRecord.lpTokenBalance + value;
-    updateDelegatorRecord(delegator, stakedBalance, storage);
+    updateDelegatorRecord(delegator, value, Tezos.now, storage);
 };

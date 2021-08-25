@@ -6,7 +6,8 @@ import dotenv from 'dotenv';
 dotenv.config();
 const Tezos = new TezosToolkit(process.env.DEPLOY_RPC);
 
-import farmFA2PenaltyContract from '../build/ligo-cli/farmFA2Penalty.json';
+import farmFA2PenaltyContractBuild from '../build/contracts/farmFA2Penalty.json';
+const farmFA2PenaltyContract = JSON.parse(farmFA2PenaltyContractBuild.michelson);
 import initialStorage from '../migrations/initialStorage/farm';
 
 (async function () {
