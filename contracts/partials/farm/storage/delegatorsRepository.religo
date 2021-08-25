@@ -62,6 +62,7 @@ let updateRewardDebt = ((delegator, storage): (address, storage)): storage => {
 #if PENALTY
     let newLastUpdate = delegatorRecord.lastUpdate;
 #else
+    // in this case newLastUpdate will not be saved, we just pass a valid timestap for the compiler
     let newLastUpdate = Tezos.now;
 #endif    
     let storage = updateDelegatorRecord(
@@ -79,6 +80,7 @@ let decreaseDelegatorBalance = ((delegator, value, storage): (address, nat, stor
 #if PENALTY
     let newLastUpdate = delegatorRecord.lastUpdate;
 #else
+    // in this case newLastUpdate will not be saved, we just pass a valid timestap for the compiler
     let newLastUpdate = Tezos.now;
 #endif
     updateDelegatorRecord(delegator, stakedBalance, newLastUpdate, storage);

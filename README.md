@@ -25,6 +25,8 @@ yarn run test
 
 To deploy the contract first copy `.env.sample` to `.env` and define the settings for the environment you want to deploy to.
 
+Compile the contract using `yarn compile`.
+
 Then you can call `ts-node ./scripts/deployment.ts` to deploy the contract. If the rewards are payed from the admins wallet, the delegation of those rewards is also activated.
 
 If not you need to set the `DELEGATE_*` variables in the `.env` file and run `ts-node ./scripts/delegate.ts` to allow access to the funds.
